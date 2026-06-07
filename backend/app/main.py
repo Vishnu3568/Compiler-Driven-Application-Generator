@@ -46,6 +46,10 @@ class SimulationRequest(BaseModel):
 def read_root():
     return {"status": "online", "service": "ForgeFlow AI Compiler Engine"}
 
+@app.get("/healthz")
+def health_check():
+    return {"status": "healthy"}
+
 @app.post("/api/generate", response_model=Blueprint)
 async def generate_blueprint(request: GenerateRequest):
     """
