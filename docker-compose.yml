@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - LLM_MODEL_PLANNER=gpt-4o-mini
+      - LLM_MODEL_VALIDATOR=gpt-4o-mini
+      - LLM_MODEL_REPAIR=gpt-4o-mini
+    volumes:
+      - ./backend:/workspace
+      - ./generated-app:/workspace/generated-app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
