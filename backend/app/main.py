@@ -1,6 +1,7 @@
 import os
 import logging
 from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
@@ -108,3 +109,36 @@ def simulate_existing(request: SimulationRequest):
     except Exception as e:
         logger.error(f"Simulation error: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Simulation failed: {str(e)}")
+
+@app.get("/api/export/{build_id}")
+def export_build(build_id: str):
+    """
+    Export all generated source files (migrations, routes, pages, middleware)
+    as a single ZIP archive.
+    """
+    import os
+    import shutil
+    import tempfile
+    
+    # Try resolving from temp directory first
+    temp_dir = tempfile.gettempdir()
+    build_dir = os.path.join(temp_dir, "forgeflow", "generated-app")
+    
+    if not os.path.exists(build_dir):
+        # Fallback to local workspace project folder
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        project_root = os.path.dirname(backend_dir)
+        build_dir = os.path.join(project_root, "generated-app")
+        
+    if not os.path.exists(build_dir) or not os.listdir(build_dir):
+        raise HTTPException(status_code=404, detail="No generated blueprint files found to export.")
+        
+    zip_out = os.path.join(temp_dir, f"forgeflow_build_{build_id}")
+    shutil.make_archive(zip_out, 'zip', build_dir)
+    
+    return FileResponse(
+        path=f"{zip_out}.zip",
+        filename=f"forgeflow_blueprint_{build_id[:8]}.zip",
+        media_type="application/zip"
+    )
+

@@ -141,3 +141,19 @@ def test_new_validation_rules():
     assert report.is_valid is True
     assert len(report.issues) == 0
 
+def test_export_blueprint_zip():
+    from fastapi.testclient import TestClient
+    from app.main import app
+    client = TestClient(app)
+    
+    # 1. Trigger compilation first
+    response = client.post("/api/generate", json={"prompt": "Build CRM"})
+    assert response.status_code == 200
+    blueprint_id = response.json()["id"]
+    
+    # 2. Test export endpoint
+    export_response = client.get(f"/api/export/{blueprint_id}")
+    assert export_response.status_code == 200
+    assert export_response.headers["content-type"] == "application/zip"
+
+

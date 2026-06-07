@@ -280,6 +280,11 @@ export default function CompilerConsole() {
     }
   };
 
+  const handleDownloadZip = () => {
+    if (!blueprint) return;
+    window.open(`${API_BASE_URL}/api/export/${blueprint.id}`, '_blank');
+  };
+
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Console Header */}
@@ -413,6 +418,14 @@ export default function CompilerConsole() {
             
             {blueprint && (
               <div className="flex items-center space-x-4">
+                <button
+                  id="download-blueprint-btn"
+                  onClick={handleDownloadZip}
+                  className="flex items-center space-x-1.5 bg-[#121833] border border-cyan-500/30 hover:border-cyan-500 text-cyan-300 hover:text-white px-2.5 py-1 rounded-md text-[10px] font-semibold transition-all select-none active:scale-[0.97]"
+                >
+                  <FileCode className="w-3.5 h-3.5" />
+                  <span>Download Blueprint (.zip)</span>
+                </button>
                 <span className="text-[10px] bg-purple-950/50 border border-purple-800 text-purple-300 font-mono px-2 py-0.5 rounded-md">
                   Repairs: {blueprint.metrics.repairs_count}
                 </span>

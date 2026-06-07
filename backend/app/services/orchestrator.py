@@ -23,7 +23,9 @@ class Orchestrator:
     ) -> Blueprint:
         if base_dir is None:
             try:
-                base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "generated-app")
+                backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                project_root = os.path.dirname(backend_dir)
+                base_dir = os.path.join(project_root, "generated-app")
                 os.makedirs(base_dir, exist_ok=True)
             except Exception:
                 base_dir = os.path.join(tempfile.gettempdir(), "forgeflow", "generated-app")
