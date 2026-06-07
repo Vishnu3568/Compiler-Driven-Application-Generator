@@ -172,8 +172,7 @@ export default function CompilerConsole() {
   const [activeTab, setActiveTab] = useState<'flow' | 'schemas' | 'simulator'>('flow');
   const [activeSchemaTab, setActiveSchemaTab] = useState<'ui' | 'api' | 'db' | 'auth' | 'rules'>('ui');
   const [planActive, setPlanActive] = useState<boolean>(true);
-  const [timeLeft, setTimeLeft] = useState<string>('48 : 00 : 01');
-  
+
   // Pipeline Build State
   const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
   
@@ -208,26 +207,6 @@ export default function CompilerConsole() {
     }
   }, []);
 
-  // Time-left countdown hook
-  useEffect(() => {
-    let totalSeconds = 48 * 3600 + 1;
-    const interval = setInterval(() => {
-      if (totalSeconds <= 0) {
-        clearInterval(interval);
-        return;
-      }
-      totalSeconds -= 1;
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      
-      const hStr = String(hours).padStart(2, '0');
-      const mStr = String(minutes).padStart(2, '0');
-      const sStr = String(seconds).padStart(2, '0');
-      setTimeLeft(`${hStr} : ${mStr} : ${sStr}`);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleCategoryClick = (category: string) => {
     if (category === '... More') {
@@ -382,15 +361,6 @@ export default function CompilerConsole() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#060814]">
-      {/* Welcome Offer Banner */}
-      <div className="w-full bg-gradient-to-r from-[#f36b2b] to-[#f8783d] text-white font-medium text-xs py-2.5 px-8 flex justify-center items-center gap-3 select-none relative z-10 shadow-lg shadow-orange-500/10">
-        <span className="bg-[#fff0eb]/20 text-[10px] uppercase font-bold px-2 py-0.5 rounded tracking-wide border border-white/20 select-none">Limited time welcome offer</span>
-        <a href="#" className="underline hover:text-orange-100 transition-all text-[11px] flex items-center gap-1 font-semibold">
-          Get 30% off select yearly plans <span className="text-[10px] text-orange-200">↗</span>
-        </a>
-        <span className="text-white/60 font-light select-none font-sans">|</span>
-        <span className="bg-[#fcdcd2] text-[#d64118] px-2 py-0.5 rounded font-mono text-[11px] font-bold shadow-inner tracking-wider select-none">{timeLeft}</span>
-      </div>
 
       {blueprint === null && !isLoading ? (
         // Spacious Landing Workspace
