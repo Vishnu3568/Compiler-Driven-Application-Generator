@@ -1,23 +1,23 @@
 # ForgeFlow AI: Compiler-Driven Application Generator
 
-ForgeFlow AI is a production-grade compiler pipeline that transforms natural language requirements into validated, executable application blueprints (comprising UI schemas, API endpoint specs, database migrations, security roles, and business constraints).
+ForgeFlow AI is a compiler-like software generation engine. It transforms natural language requirements into validated, executable application configurations comprising UI schemas, API endpoint specs, database migrations, security roles, and business constraints, and executes them in a simulated runtime sandbox.
 
 ---
 
 ## ⚡ Key Features
 
 - **Multi-Stage Compiler Pipeline**:
-  - **Intent & Assumptions**: Extracts feature intents and generates assumptions for ambiguous prompts.
-  - **Architecture Planner**: Maps functional scopes to database tables and services.
-  - **Schema Generation**: Formulates schemas for UI, API, DB, Auth, and Business Rules with deterministic ordering.
-  - **Cross-Layer Validation**: Asserts multi-layer alignment (e.g. required request fields mapped to database columns).
-  - **Intelligent Repair Engine**: Performs targeted corrections on faulty schema layers.
-  - **Runtime Simulator**: Emits migration SQL DDL, FastAPI router scripts, Next.js page JSX files, and runs dry-run queries on an in-memory SQLite engine.
+  - **Intent & Assumptions (Stage 1)**: Extracts functional intent, user roles, and logs logical assumptions for ambiguous prompts.
+  - **Architecture Planner (Stage 2)**: Maps intents into application architectures (Entities, Pages, and Services).
+  - **Schema Generation (Stage 3)**: Formulates JSON schemas for UI, API, DB, Auth, and Business Rules with deterministic ordering.
+  - **Cross-Layer Validation (Stage 4)**: Performs type matching and cross-dependency validation (e.g. required request fields mapped to database columns, UI components bound to active endpoints).
+  - **Intelligent Repair Engine (Stage 5)**: Automatically repairs validation anomalies by targeting and regenerating only the faulty schema layer.
+  - **Runtime Simulator (Stage 6)**: Outputs SQL migration files, FastAPI endpoint modules, Next.js page components, and runs migrations on an in-memory **SQLite sandbox database** to guarantee deployability.
 
 - **Developer Dashboard**:
-  - **Compilation Flow Visualizer**: Live logs and outputs for every compilation phase.
-  - **Schema Editor**: Interactive JSON text editors to alter schemas and trigger revalidation.
-  - **Metrics Dashboard**: Telemetry tracking success rate, latencies, repair counts, and individual test reports for all 20 benchmark prompts.
+  - **Compilation Flow Visualizer**: Tracks live logs, execution steps, and assumptions in real-time.
+  - **Schema Editor & Explorer**: Interactive JSON configs where users can modify schemas and trigger re-simulations.
+  - **Metrics Dashboard**: Plots latency, success rates, and repairs across the 20 benchmark prompts.
 
 ---
 
@@ -26,64 +26,88 @@ ForgeFlow AI is a production-grade compiler pipeline that transforms natural lan
 ```
 ├── backend/
 │   ├── app/
-│   │   ├── core/            # Environment configurations
-│   │   ├── models/          # Pydantic schemas
-│   │   ├── services/        # Pipeline stage modules
-│   │   └── main.py          # FastAPI server endpoints
-│   ├── tests/               # Pytest unit & integration tests
+│   │   ├── core/            # Configs and settings
+│   │   ├── models/          # Pydantic schemas (validates UI, API, DB, Auth configs)
+│   │   ├── services/        # Agents: extractor, planner, generator, validator, repairer, simulator, evaluator
+│   │   └── main.py          # FastAPI web server and routing
+│   ├── tests/               # Pytest suite
 │   ├── requirements.txt
 │   └── Dockerfile
 │
 ├── frontend/
-│   ├── app/                 # Next.js 15 routing, console, metrics
+│   ├── app/                 # Next.js 15 routing, layout, styling, and charts
 │   ├── components/          # Dashboard components
-│   ├── tailwind.config.js   # Custom HSL color theme
 │   ├── package.json
 │   └── Dockerfile
 │
-├── generated-app/           # Target compile directory (SQL, API, Pages)
 ├── docker-compose.yml
 └── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Local Getting Started
 
 ### 🐳 Run with Docker (Recommended)
-
-Start the unified multi-container system:
+From the project root:
 ```bash
 docker-compose up --build
 ```
-- Open the dashboard: [http://localhost:3000](http://localhost:3000)
-- Inspect the API: [http://localhost:8000/docs](http://localhost:8000/docs)
+* **Dashboard**: [http://localhost:3000](http://localhost:3000)
+* **Backend API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### 💻 Run Locally
 
-#### 1. Setup Backend
+#### 1. Start the Backend (FastAPI)
 ```bash
 cd backend
 pip install -r requirements.txt
-$env:PYTHONPATH="."  # PowerShell
+# On PowerShell:
+$env:PYTHONPATH="."
+# On CMD:
+set PYTHONPATH=.
+
 uvicorn app.main:app --reload --port 8000
 ```
 
-#### 2. Setup Frontend
+#### 2. Start the Frontend (Next.js)
 ```bash
-cd ../frontend
+cd frontend
 npm install
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ## 🧪 Testing
 
-Execute backend test suites to verify validator constraints, repairs, and migrations:
+Run backend tests verifying type safety, SQL simulations, and cross-layer validators:
 ```bash
 cd backend
-$env:PYTHONPATH="."  # PowerShell
+# On PowerShell:
+$env:PYTHONPATH="."
+# On CMD:
+set PYTHONPATH=.
+
 pytest tests/
 ```
+
+---
+
+## ☁️ Production Cloud Deployment
+
+### 1. Backend Deployment (e.g. Render, Railway, or Fly.io)
+1. Set the root directory to `backend`.
+2. Install dependencies via `pip install -r requirements.txt`.
+3. Launch with `uvicorn app.main:app --host 0.0.0.0 --port 10000`.
+4. Add environment variables:
+   * `PYTHONPATH` = `.`
+   * *(Optional)* `OPENAI_API_KEY` = `your_key` (omitting defaults to local mock compilation fallback).
+
+### 2. Frontend Deployment (Vercel)
+1. Create a new project pointing to your GitHub repository.
+2. Set the root directory to `frontend`.
+3. Set the build environment variable:
+   * **`NEXT_PUBLIC_API_URL`**: *Your deployed FastAPI backend URL* (e.g. `https://forgeflow-backend.onrender.com`).
+4. Click **Deploy**.
