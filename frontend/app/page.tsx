@@ -414,21 +414,8 @@ export default function CompilerConsole() {
               className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm outline-none resize-none min-h-[108px] font-sans leading-relaxed"
             />
             
-            <div className="flex justify-between items-center border-t border-[#1e275f] pt-3 select-none">
-              {/* Left action icons */}
-              <div className="flex items-center gap-1 text-slate-500">
-                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
-                  <Plus className="w-4 h-4" />
-                </button>
-                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
-                  <SlidersHorizontal className="w-4 h-4" />
-                </button>
-                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
-                  <HelpCircle className="w-4 h-4" />
-                </button>
-              </div>
-              
-              {/* Right actions */}
+            <div className="flex justify-end items-center border-t border-[#1e275f] pt-3 select-none">
+              {/* Functional Actions */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] font-semibold text-slate-400 font-sans">Plan</span>
@@ -439,10 +426,6 @@ export default function CompilerConsole() {
                     <div className={`bg-white w-3.5 h-3.5 rounded-full shadow-md transform duration-200 ${planActive ? 'translate-x-3.5' : 'translate-x-0'}`} />
                   </button>
                 </div>
-                
-                <button className="p-2 hover:bg-slate-800/40 text-slate-400 hover:text-slate-200 rounded-xl transition-all">
-                  <Mic className="w-4 h-4" />
-                </button>
                 
                 <button
                   id="compile-button"
