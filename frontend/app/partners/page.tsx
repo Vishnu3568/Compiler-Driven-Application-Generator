@@ -61,15 +61,15 @@ export default function PartnersPage() {
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#060814]">
 
       {/* Header */}
-      <header className="h-28 border-b border-[#1a1f38] bg-[#0b0f24] px-8 flex flex-col justify-center select-none shrink-0">
-        <h1 id="partners-title" className="font-extrabold text-white text-2xl tracking-tight">Base44 Partners</h1>
+      <header className="min-h-28 border-b border-[#1a1f38] bg-[#0b0f24] px-4 sm:px-8 py-4 sm:py-0 flex flex-col justify-center select-none shrink-0">
+        <h1 id="partners-title" className="font-extrabold text-white text-xl sm:text-2xl tracking-tight">Base44 Partners</h1>
         <span className="text-xs text-slate-400 mt-1">From first steps to advanced builds, Base44 Partners provide the expertise and insight to help you achieve the best outcome.</span>
       </header>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
         {/* Search & Select dropdowns toolbar */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
@@ -109,7 +109,7 @@ export default function PartnersPage() {
         </div>
 
         {/* Partners Grid */}
-        <div className="grid grid-cols-3 gap-6 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
           {filteredPartners.map((p, idx) => (
             <div key={idx} className="glass-card bg-[#090d22]/40 border border-[#1a1f38] rounded-2xl p-6 hover:border-[#f36b2b]/40 flex flex-col justify-between space-y-6 transition-all">
               <div className="space-y-4">

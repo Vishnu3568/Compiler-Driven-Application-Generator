@@ -92,15 +92,15 @@ export default function TemplatesMarketplace() {
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#060814]">
 
       {/* Header */}
-      <header className="h-20 border-b border-[#1a1f38] bg-[#0b0f24] px-8 flex flex-col justify-center select-none shrink-0">
-        <h1 id="templates-title" className="font-extrabold text-white text-2xl tracking-tight">App Templates</h1>
+      <header className="min-h-20 border-b border-[#1a1f38] bg-[#0b0f24] px-4 sm:px-8 py-4 sm:py-0 flex flex-col justify-center select-none shrink-0">
+        <h1 id="templates-title" className="font-extrabold text-white text-xl sm:text-2xl tracking-tight">App Templates</h1>
         <span className="text-xs text-slate-400 mt-1">Explore a curated collection of applications built by our community.</span>
       </header>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
         {/* Search & Select dropdowns toolbar */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
@@ -141,7 +141,7 @@ export default function TemplatesMarketplace() {
         </div>
 
         {/* Templates Grid */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTemplates.map((t, idx) => (
             <div key={idx} className="glass-card hover:border-[#f36b2b]/50 transition-all flex flex-col group overflow-hidden bg-[#090d22]/40">
               {/* Mock Image Header */}

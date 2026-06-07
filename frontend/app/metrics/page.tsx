@@ -94,12 +94,12 @@ export default function MetricsDashboard() {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <header className="h-16 border-b border-[#1a1f38] bg-[#090d22] px-8 flex items-center justify-between select-none">
+      <header className="min-h-16 border-b border-[#1a1f38] bg-[#090d22] px-4 sm:px-8 py-3 sm:py-0 flex flex-col sm:flex-row sm:items-center justify-between select-none gap-3">
         <div className="flex items-center space-x-3">
           <TrendingUp className="w-5 h-5 text-cyan-400" />
           <h1 id="metrics-dashboard-title" className="font-semibold text-white text-base">Metrics & Benchmarks</h1>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3 select-none">
           <button
             id="metrics-reload-btn"
             onClick={fetchMetrics}
@@ -109,25 +109,24 @@ export default function MetricsDashboard() {
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             <span>Reload</span>
           </button>
-          
           <button
             id="run-evaluation-btn"
             onClick={handleRunEvaluation}
-            disabled={isTriggering}
-            className="flex items-center space-x-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-all active:scale-[0.98]"
+            disabled={isTriggering || isLoading}
+            className="flex items-center space-x-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-cyan-500/15 active:scale-[0.98]"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
-            <span>Run 20-Prompt Suite</span>
+            <span>{isTriggering ? 'Triggering...' : 'Run Benchmarks Suite'}</span>
           </button>
         </div>
       </header>
 
       {/* Main Body */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-8">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8">
         {metrics && (
           <>
             {/* KPI Cards Grid */}
-            <div className="grid grid-cols-5 gap-6 select-none">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 select-none">
               <div className="glass-card p-5 space-y-2">
                 <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono font-bold">Compiler Success</span>
                 <div className="flex items-baseline space-x-1">
@@ -180,7 +179,7 @@ export default function MetricsDashboard() {
             </div>
 
             {/* Recharts Charts Grid */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Latency Chart */}
               <div className="glass-card p-6 flex flex-col h-[320px]">
                 <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Prompt compilation latencies</h4>

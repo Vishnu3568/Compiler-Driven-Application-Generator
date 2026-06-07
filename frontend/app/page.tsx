@@ -364,9 +364,9 @@ export default function CompilerConsole() {
 
       {blueprint === null && !isLoading ? (
         // Spacious Landing Workspace
-        <div className="flex-1 overflow-y-auto p-8 flex flex-col justify-start">
-          <div className="max-w-3xl mx-auto text-center mt-20 mb-8 space-y-4">
-            <h2 className="text-4xl font-extrabold tracking-tight leading-tight select-none bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 flex flex-col justify-start">
+          <div className="max-w-3xl mx-auto text-center mt-12 md:mt-20 mb-8 space-y-4 px-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight select-none bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
               What will you build next, Uppari?
             </h2>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-normal">
@@ -375,7 +375,7 @@ export default function CompilerConsole() {
           </div>
 
           {/* Centralized Prompt Box */}
-          <div className="w-full max-w-2.5xl mx-auto bg-[#0d122f] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-4.5 border border-[#1e275f] focus-within:border-[#f36b2b]/60 transition-all duration-300 focus-within:shadow-[0_0_30px_rgba(243,107,43,0.12)] relative flex flex-col gap-3">
+          <div className="w-full max-w-3xl mx-auto bg-[#0d122f] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-4 border border-[#1e275f] focus-within:border-[#f36b2b]/60 transition-all duration-300 focus-within:shadow-[0_0_30px_rgba(243,107,43,0.12)] relative flex flex-col gap-3">
             <textarea
               id="prompt-input-textarea"
               value={promptInput}
@@ -410,7 +410,7 @@ export default function CompilerConsole() {
           </div>
 
           {/* Quick pills below */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto mt-6 select-none">
+          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mt-6 px-4 select-none">
             {['Tasks & Workflows', 'CRM & Sales', 'Content & Sites', 'Finance', 'Booking', '... More'].map((category) => (
               <button
                 key={category}
@@ -423,14 +423,14 @@ export default function CompilerConsole() {
           </div>
 
           {/* Bottom Templates Section */}
-          <div className="w-full max-w-4xl mx-auto mt-20 pb-16">
+          <div className="w-full max-w-4xl mx-auto mt-20 pb-16 px-4">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-white tracking-wide">Templates</h3>
               <Link href="/templates" className="text-xs text-slate-400 hover:text-[#f36b2b] font-semibold transition-all">
                 View all &gt;
               </Link>
             </div>
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {TEMPLATES.map((t, idx) => (
                 <div key={idx} className="glass-card hover:border-[#f36b2b]/50 transition-all flex flex-col group overflow-hidden bg-[#090d22]/40">
                   <div className="h-32 bg-slate-950/40 relative overflow-hidden flex items-center justify-center border-b border-[#1a1f38]">
@@ -472,9 +472,9 @@ export default function CompilerConsole() {
         </div>
       ) : (
         // Console view showing current build and reports
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden">
           {/* Console Header */}
-          <header className="h-16 border-b border-[#1a1f38] bg-[#090d22] px-8 flex items-center justify-between select-none">
+          <header className="min-h-16 border-b border-[#1a1f38] bg-[#090d22] px-4 sm:px-8 py-3 sm:py-0 flex flex-col sm:flex-row sm:items-center justify-between select-none gap-3">
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => {
@@ -496,9 +496,9 @@ export default function CompilerConsole() {
           </header>
 
           {/* Main Grid Panel */}
-          <div className="flex-1 grid grid-cols-12 overflow-hidden">
+          <div className="flex-1 flex flex-col lg:grid lg:grid-cols-12 overflow-y-auto lg:overflow-hidden">
             {/* Left Input Sidebar */}
-            <section className="col-span-4 border-r border-[#1a1f38] bg-[#070a1e] p-6 flex flex-col justify-between overflow-y-auto">
+            <section className="w-full lg:col-span-4 border-b lg:border-b-0 lg:border-r border-[#1a1f38] bg-[#070a1e] p-4 sm:p-6 flex flex-col justify-between shrink-0 lg:overflow-y-auto">
               <div className="space-y-6">
                 {/* Title / Description */}
                 <div>
@@ -586,9 +586,9 @@ export default function CompilerConsole() {
             </section>
 
             {/* Right Output Inspector tabs */}
-            <section className="col-span-8 bg-[#050716] flex flex-col overflow-hidden">
+            <section className="w-full lg:col-span-8 bg-[#050716] flex flex-col overflow-hidden min-h-[500px] lg:min-h-0">
               {/* Tab Navigation header */}
-              <div className="h-12 border-b border-[#1a1f38] bg-[#070b20] px-6 flex items-center justify-between select-none">
+              <div className="min-h-12 border-b border-[#1a1f38] bg-[#070b20] px-4 md:px-6 py-2 sm:py-0 flex flex-col sm:flex-row sm:items-center justify-between select-none gap-2 sm:gap-4">
                 <div className="flex space-x-1">
                   <button
                     id="tab-flow-btn"
@@ -614,7 +614,7 @@ export default function CompilerConsole() {
                 </div>
                 
                 {blueprint && (
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 md:space-x-4 flex-wrap gap-2 py-1.5 sm:py-0 justify-end">
                     <button
                       id="download-blueprint-btn"
                       onClick={handleDownloadZip}
