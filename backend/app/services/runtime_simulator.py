@@ -19,8 +19,11 @@ class RuntimeSimulator:
         auth_schema: AuthSchema,
         business_rules: BusinessRulesSchema,
         validation_report: ValidationReport,
-        base_dir: str = "e:/Project Folder/Compiler-Driven Application Generator/generated-app"
+        base_dir: str = None
     ) -> ExecutionReport:
+        if base_dir is None:
+            import tempfile
+            base_dir = os.path.join(tempfile.gettempdir(), "forgeflow", "generated-app")
         steps = []
         logs = []
         errors = []

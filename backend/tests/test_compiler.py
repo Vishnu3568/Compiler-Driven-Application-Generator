@@ -100,9 +100,12 @@ def test_sqlite_simulator_success():
     rules = BusinessRulesSchema(rules=[])
     report = ValidationEngine.validate_all(ui, api, db, auth, rules)
 
+    import tempfile
+    import os
+    test_dir = os.path.join(tempfile.gettempdir(), "forgeflow-test")
     exec_report = RuntimeSimulator.simulate(
         ui, api, db, auth, rules, report,
-        base_dir="e:/Project Folder/Compiler-Driven Application Generator/generated-app-test"
+        base_dir=test_dir
     )
     assert exec_report.success is True
     assert len(exec_report.errors) == 0

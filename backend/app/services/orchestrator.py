@@ -1,3 +1,5 @@
+import os
+import tempfile
 import time
 import uuid
 import logging
@@ -17,8 +19,15 @@ class Orchestrator:
     def compile_app(
         prompt: str,
         custom_settings: Optional[Dict[str, Any]] = None,
-        base_dir: str = "e:/Project Folder/Compiler-Driven Application Generator/generated-app"
+        base_dir: Optional[str] = None
     ) -> Blueprint:
+        if base_dir is None:
+            try:
+                base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "generated-app")
+                os.makedirs(base_dir, exist_ok=True)
+            except Exception:
+                base_dir = os.path.join(tempfile.gettempdir(), "forgeflow", "generated-app")
+                os.makedirs(base_dir, exist_ok=True)
         start_time = time.time()
         repairs_attempted = 0
         max_repairs = 3
