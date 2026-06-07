@@ -284,7 +284,7 @@ export default function CompilerConsole() {
       <header className="h-16 border-b border-[#1a1f38] bg-[#090d22] px-8 flex items-center justify-between select-none">
         <div className="flex items-center space-x-3">
           <Layers className="w-5 h-5 text-cyan-400" />
-          <h2 className="font-semibold text-white">Compiler Console</h2>
+          <h1 id="compiler-console-title" className="font-semibold text-white text-base">Compiler Console</h1>
         </div>
         <div className="text-xs text-slate-500 font-mono">
           Ready to synthesize application blueprint
@@ -306,6 +306,7 @@ export default function CompilerConsole() {
             <div className="space-y-2">
               <label className="text-xs text-slate-400 font-medium">Standard / Edge Benchmarks</label>
               <select
+                id="benchmark-prompt-select"
                 value={selectedPromptId}
                 onChange={handleSelectPrompt}
                 className="w-full bg-[#121833] border border-[#222a57] rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-purple-500 transition-all duration-150"
@@ -328,6 +329,7 @@ export default function CompilerConsole() {
             <div className="space-y-2">
               <label className="text-xs text-slate-400 font-medium">Product Specification Prompt</label>
               <textarea
+                id="prompt-input-textarea"
                 value={promptInput}
                 onChange={e => setPromptInput(e.target.value)}
                 placeholder="Describe your app requirements in natural language (e.g. Build a CRM with billing, login and deals module...)"
@@ -338,6 +340,7 @@ export default function CompilerConsole() {
 
             {/* Trigger Button */}
             <button
+              id="compile-button"
               onClick={handleCompile}
               disabled={isLoading || !promptInput.trim()}
               className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-40 disabled:hover:from-purple-600 disabled:hover:to-indigo-600 text-white font-semibold text-xs py-3.5 px-6 rounded-xl transition-all duration-150 shadow-lg shadow-purple-500/20 active:scale-[0.98]"
@@ -384,18 +387,21 @@ export default function CompilerConsole() {
           <div className="h-12 border-b border-[#1a1f38] bg-[#070b20] px-6 flex items-center justify-between select-none">
             <div className="flex space-x-1">
               <button
+                id="tab-flow-btn"
                 onClick={() => setActiveTab('flow')}
                 className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-150 ${activeTab === 'flow' ? 'bg-[#151c3a] text-white' : 'text-slate-400 hover:text-white'}`}
               >
                 Pipeline Visualizer
               </button>
               <button
+                id="tab-schemas-btn"
                 onClick={() => setActiveTab('schemas')}
                 className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-150 ${activeTab === 'schemas' ? 'bg-[#151c3a] text-white' : 'text-slate-400 hover:text-white'}`}
               >
                 Schema Editor & Explorer
               </button>
               <button
+                id="tab-simulator-btn"
                 onClick={() => setActiveTab('simulator')}
                 className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-150 ${activeTab === 'simulator' ? 'bg-[#151c3a] text-white' : 'text-slate-400 hover:text-white'}`}
               >
@@ -610,6 +616,7 @@ export default function CompilerConsole() {
                         <p className="text-[11px] text-slate-500">Edit the generated schema JSONs directly and trigger re-simulation to test consistency.</p>
                       </div>
                       <button
+                        id="simulate-revalidate-btn"
                         onClick={handleSimulateEdit}
                         disabled={isSimulating}
                         className="flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs py-2 px-4 rounded-xl transition-all duration-150 active:scale-[0.98]"

@@ -95,10 +95,11 @@ export default function MetricsDashboard() {
       <header className="h-16 border-b border-[#1a1f38] bg-[#090d22] px-8 flex items-center justify-between select-none">
         <div className="flex items-center space-x-3">
           <TrendingUp className="w-5 h-5 text-cyan-400" />
-          <h2 className="font-semibold text-white">Metrics & Benchmarks</h2>
+          <h1 id="metrics-dashboard-title" className="font-semibold text-white text-base">Metrics & Benchmarks</h1>
         </div>
         <div className="flex items-center space-x-4">
           <button
+            id="metrics-reload-btn"
             onClick={fetchMetrics}
             disabled={isLoading}
             className="flex items-center space-x-1.5 bg-[#121833] border border-[#222a57] text-slate-300 hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all"
@@ -108,6 +109,7 @@ export default function MetricsDashboard() {
           </button>
           
           <button
+            id="run-evaluation-btn"
             onClick={handleRunEvaluation}
             disabled={isTriggering}
             className="flex items-center space-x-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-all active:scale-[0.98]"
