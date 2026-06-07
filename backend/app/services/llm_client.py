@@ -159,93 +159,90 @@ def clean_json_response(text: str) -> str:
         text = text[:-3]
     return text.strip()
 
+def _call_mock_llm(prompt: str, response_schema: dict) -> dict:
+    """Fallback to local rule-based matching."""
+    normalized_prompt = prompt.lower()
+    
+    # Determine closest template key
+    template_key = "crm"
+    for key in MOCK_TEMPLATES:
+        if key.replace("_", " ") in normalized_prompt or normalized_prompt.startswith(key.split("_")[0]):
+            template_key = key
+            break
+    
+    template = MOCK_TEMPLATES[template_key]
+    
+    # Formulate a dynamic response matching the requested schema structure
+    properties = response_schema.get("properties", {})
+    mock_response = {}
+    
+    # Simple heuristics to adapt mock templates dynamically
+    for prop, prop_schema in properties.items():
+        if prop == "app_type":
+            if "uber" in normalized_prompt:
+                mock_response[prop] = "Uber for Dragons"
+            elif "tinder" in normalized_prompt:
+                mock_response[prop] = "Tinder for Dogs"
+            elif "erp" in normalized_prompt:
+                mock_response[prop] = "ERP System"
+            else:
+                mock_response[prop] = template.get("app_type", "CRM App")
+        elif prop == "features":
+            mock_response[prop] = template.get("features", ["auth", "dashboard"])
+        elif prop == "assumptions":
+            mock_response[prop] = template.get("assumptions", ["Standard SaaS model assumed."])
+        elif prop == "entities":
+            mock_response[prop] = template.get("entities", ["User", "Contact"])
+        elif prop == "pages":
+            is_ui_pages = False
+            items_schema = prop_schema.get("items", {})
+            if isinstance(items_schema, dict):
+                if "$ref" in items_schema or items_schema.get("type") == "object":
+                    is_ui_pages = True
+            
+            if is_ui_pages:
+                mock_response[prop] = template.get("ui_pages", [])
+            else:
+                mock_response[prop] = template.get("pages", ["Dashboard", "Contacts"])
+        elif prop == "services":
+            mock_response[prop] = template.get("services", ["AuthService"])
+        elif prop == "endpoints":
+            mock_response[prop] = template.get("api_endpoints", [])
+        elif prop == "tables":
+            mock_response[prop] = template.get("db_tables", [])
+        elif prop == "roles":
+            is_auth_roles = False
+            items_schema = prop_schema.get("items", {})
+            if isinstance(items_schema, dict):
+                if "$ref" in items_schema or items_schema.get("type") == "object":
+                    is_auth_roles = True
+            
+            if is_auth_roles:
+                mock_response[prop] = template.get("auth_roles", [])
+            else:
+                mock_response[prop] = template.get("roles", ["admin", "user"])
+        elif prop == "roles" and "permissions" in str(prop_schema):
+            mock_response[prop] = template.get("auth_roles", [])
+        elif prop == "rules":
+            mock_response[prop] = template.get("rules", [])
+        else:
+            if prop_schema.get("type") == "array":
+                mock_response[prop] = []
+            elif prop_schema.get("type") == "object":
+                mock_response[prop] = {}
+            else:
+                mock_response[prop] = "Generated placeholder"
+    
+    return mock_response
+
 def call_llm(prompt: str, response_schema: dict, system_prompt: str = "You are a helpful compiler agent.") -> dict:
     """
     Calls the configured LLM API (OpenAI or Gemini compatibility layer).
-    Falls back to a structured rule-based generator if no API key exists.
+    Falls back to a structured rule-based generator if no API key exists or if the call fails.
     """
-    # Check if API Key is configured
-    if not settings.OPENAI_API_KEY:
-        # Fallback to local rule-based matching
-        normalized_prompt = prompt.lower()
-        
-        # Determine closest template key
-        template_key = "crm"
-        for key in MOCK_TEMPLATES:
-            if key.replace("_", " ") in normalized_prompt or normalized_prompt.startswith(key.split("_")[0]):
-                template_key = key
-                break
-        
-        template = MOCK_TEMPLATES[template_key]
-        
-        # Formulate a dynamic response matching the requested schema structure
-        # Let's inspect the target fields from the response schema
-        properties = response_schema.get("properties", {})
-        mock_response = {}
-        
-        # Simple heuristics to adapt mock templates dynamically
-        for prop, prop_schema in properties.items():
-            if prop == "app_type":
-                # Detect app type dynamically or use mock default
-                if "uber" in normalized_prompt:
-                    mock_response[prop] = "Uber for Dragons"
-                elif "tinder" in normalized_prompt:
-                    mock_response[prop] = "Tinder for Dogs"
-                elif "erp" in normalized_prompt:
-                    mock_response[prop] = "ERP System"
-                else:
-                    mock_response[prop] = template.get("app_type", "CRM App")
-            elif prop == "features":
-                mock_response[prop] = template.get("features", ["auth", "dashboard"])
-            elif prop == "assumptions":
-                mock_response[prop] = template.get("assumptions", ["Standard SaaS model assumed."])
-            elif prop == "entities":
-                mock_response[prop] = template.get("entities", ["User", "Contact"])
-            elif prop == "pages":
-                # Check if it's the UI Schema pages (complex items) or plan pages (list of strings)
-                is_ui_pages = False
-                items_schema = prop_schema.get("items", {})
-                if isinstance(items_schema, dict):
-                    if "$ref" in items_schema or items_schema.get("type") == "object":
-                        is_ui_pages = True
-                
-                if is_ui_pages:
-                    mock_response[prop] = template.get("ui_pages", [])
-                else:
-                    mock_response[prop] = template.get("pages", ["Dashboard", "Contacts"])
-            elif prop == "services":
-                mock_response[prop] = template.get("services", ["AuthService"])
-            elif prop == "endpoints":
-                mock_response[prop] = template.get("api_endpoints", [])
-            elif prop == "tables":
-                mock_response[prop] = template.get("db_tables", [])
-            elif prop == "roles":
-                # Check if it's the Auth Schema roles (complex items) or flat roles (list of strings)
-                is_auth_roles = False
-                items_schema = prop_schema.get("items", {})
-                if isinstance(items_schema, dict):
-                    if "$ref" in items_schema or items_schema.get("type") == "object":
-                        is_auth_roles = True
-                
-                if is_auth_roles:
-                    mock_response[prop] = template.get("auth_roles", [])
-                else:
-                    mock_response[prop] = template.get("roles", ["admin", "user"])
-            elif prop == "roles" and "permissions" in str(prop_schema):
-                # Fallback for nested roles dictionary
-                mock_response[prop] = template.get("auth_roles", [])
-            elif prop == "rules":
-                mock_response[prop] = template.get("rules", [])
-            else:
-                # Provide reasonable mock values
-                if prop_schema.get("type") == "array":
-                    mock_response[prop] = []
-                elif prop_schema.get("type") == "object":
-                    mock_response[prop] = {}
-                else:
-                    mock_response[prop] = "Generated placeholder"
-        
-        return mock_response
+    # Check if API Key is configured or local fallback is explicitly requested
+    if not settings.OPENAI_API_KEY or getattr(settings, "USE_LOCAL_FALLBACK", False):
+        return _call_mock_llm(prompt, response_schema)
 
     # Real LLM Call using OpenAI SDK
     try:
@@ -276,5 +273,5 @@ def call_llm(prompt: str, response_schema: dict, system_prompt: str = "You are a
         
     except Exception as e:
         logger.error(f"Error calling LLM: {str(e)}. Falling back to local mock.")
-        # Fallback to local mock if LLM call crashes
-        return call_llm(prompt, response_schema, system_prompt)
+        # Fallback directly to local mock to prevent infinite recursion
+        return _call_mock_llm(prompt, response_schema)
