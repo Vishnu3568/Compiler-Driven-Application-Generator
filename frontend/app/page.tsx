@@ -395,32 +395,35 @@ export default function CompilerConsole() {
       {blueprint === null && !isLoading ? (
         // Spacious Landing Workspace
         <div className="flex-1 overflow-y-auto p-8 flex flex-col justify-start">
-          <div className="max-w-3xl mx-auto text-center mt-16 mb-8 space-y-3">
-            <h2 className="text-4xl font-extrabold text-white tracking-tight leading-tight select-none">
+          <div className="max-w-3xl mx-auto text-center mt-20 mb-8 space-y-4">
+            <h2 className="text-4xl font-extrabold tracking-tight leading-tight select-none bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
               What will you build next, Uppari?
             </h2>
+            <p className="text-xs text-slate-500 max-w-md mx-auto leading-normal">
+              Enter natural language requirements to compile your app's database schema, APIs, layouts, and logic.
+            </p>
           </div>
 
           {/* Centralized Prompt Box */}
-          <div className="w-full max-w-2.5xl mx-auto bg-white rounded-2xl shadow-2xl p-4 border border-[#e2e8f0] relative flex flex-col gap-3">
+          <div className="w-full max-w-2.5xl mx-auto bg-[#0d122f] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-4.5 border border-[#1e275f] focus-within:border-[#f36b2b]/60 transition-all duration-300 focus-within:shadow-[0_0_30px_rgba(243,107,43,0.12)] relative flex flex-col gap-3">
             <textarea
               id="prompt-input-textarea"
               value={promptInput}
               onChange={(e) => setPromptInput(e.target.value)}
               placeholder="Describe the app you want to create..."
-              className="w-full bg-transparent text-slate-800 placeholder-slate-400 text-sm outline-none resize-none min-h-[96px] font-sans leading-relaxed"
+              className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm outline-none resize-none min-h-[108px] font-sans leading-relaxed"
             />
             
-            <div className="flex justify-between items-center border-t border-slate-100 pt-3 select-none">
+            <div className="flex justify-between items-center border-t border-[#1e275f] pt-3 select-none">
               {/* Left action icons */}
-              <div className="flex items-center gap-1.5 text-slate-400">
-                <button className="p-2 hover:bg-slate-50 text-slate-400 hover:text-slate-600 rounded-lg transition-all">
+              <div className="flex items-center gap-1 text-slate-500">
+                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
                   <Plus className="w-4 h-4" />
                 </button>
-                <button className="p-2 hover:bg-slate-50 text-slate-400 hover:text-slate-600 rounded-lg transition-all">
+                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
                   <SlidersHorizontal className="w-4 h-4" />
                 </button>
-                <button className="p-2 hover:bg-slate-50 text-slate-400 hover:text-slate-600 rounded-lg transition-all">
+                <button className="p-2 hover:bg-slate-800/40 hover:text-slate-200 rounded-xl transition-all">
                   <HelpCircle className="w-4 h-4" />
                 </button>
               </div>
@@ -428,16 +431,16 @@ export default function CompilerConsole() {
               {/* Right actions */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-semibold text-slate-500 font-sans">Plan</span>
+                  <span className="text-[11px] font-semibold text-slate-400 font-sans">Plan</span>
                   <button 
                     onClick={() => setPlanActive(!planActive)}
-                    className={`w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 focus:outline-none ${planActive ? 'bg-[#f36b2b]' : 'bg-slate-200'}`}
+                    className={`w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 focus:outline-none ${planActive ? 'bg-[#f36b2b]' : 'bg-slate-800'}`}
                   >
                     <div className={`bg-white w-3.5 h-3.5 rounded-full shadow-md transform duration-200 ${planActive ? 'translate-x-3.5' : 'translate-x-0'}`} />
                   </button>
                 </div>
                 
-                <button className="p-2 hover:bg-slate-50 text-slate-400 hover:text-slate-600 rounded-lg transition-all">
+                <button className="p-2 hover:bg-slate-800/40 text-slate-400 hover:text-slate-200 rounded-xl transition-all">
                   <Mic className="w-4 h-4" />
                 </button>
                 
@@ -445,7 +448,7 @@ export default function CompilerConsole() {
                   id="compile-button"
                   onClick={handleCompile}
                   disabled={!promptInput.trim()}
-                  className={`h-9 w-9 rounded-full flex items-center justify-center transition-all shadow-md active:scale-95 ${promptInput.trim() ? 'bg-[#f36b2b] hover:bg-[#d6571d] text-white' : 'bg-slate-100 text-slate-300'}`}
+                  className={`h-9.5 w-9.5 rounded-full flex items-center justify-center transition-all shadow-md active:scale-95 ${promptInput.trim() ? 'bg-[#f36b2b] hover:bg-[#d6571d] text-white shadow-lg shadow-orange-500/20' : 'bg-slate-900/60 text-slate-600'}`}
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -459,7 +462,7 @@ export default function CompilerConsole() {
               <button
                 key={category}
                 onClick={() => handleCategoryClick(category)}
-                className="px-4 py-2 bg-[#0d122e]/60 border border-[#1a1f38] hover:border-[#f36b2b]/60 rounded-full text-xs font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98]"
+                className="px-4 py-2 bg-[#090d22] border border-[#1a1f38] hover:border-[#f36b2b]/50 rounded-full text-xs font-semibold text-slate-400 hover:text-white transition-all active:scale-[0.98]"
               >
                 {category}
               </button>
