@@ -129,6 +129,8 @@ interface PromptOption {
   prompt: string;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default function CompilerConsole() {
   const [prompts, setPrompts] = useState<PromptOption[]>([]);
   const [selectedPromptId, setSelectedPromptId] = useState<string>('');
@@ -154,7 +156,7 @@ export default function CompilerConsole() {
 
   // Fetch prompts on mount
   useEffect(() => {
-    fetch('http://localhost:8000/api/prompts')
+    fetch(`${API_BASE_URL}/api/prompts`)
       .then(res => res.json())
       .then(data => setPrompts(data))
       .catch(err => console.error('Error fetching prompts:', err));
@@ -195,7 +197,7 @@ export default function CompilerConsole() {
     });
 
     try {
-      const response = await fetch('http://localhost:8000/api/generate', {
+      const response = await fetch(`${API_BASE_URL}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: promptInput })
@@ -250,7 +252,7 @@ export default function CompilerConsole() {
       const rules = JSON.parse(rulesEdit);
       
       // Perform local cross-layer validation check first in backend
-      const checkResponse = await fetch('http://localhost:8000/api/simulate', {
+      const checkResponse = await fetch(`${API_BASE_URL}/api/simulate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

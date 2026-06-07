@@ -27,6 +27,8 @@ interface EvaluationMetrics {
   evaluated_at: string;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default function MetricsDashboard() {
   const [metrics, setMetrics] = useState<EvaluationMetrics | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +37,7 @@ export default function MetricsDashboard() {
   // Fetch metrics data on mount
   const fetchMetrics = () => {
     setIsLoading(true);
-    fetch('http://localhost:8000/api/metrics')
+    fetch(`${API_BASE_URL}/api/metrics`)
       .then(res => res.json())
       .then(data => {
         setMetrics(data);
@@ -54,7 +56,7 @@ export default function MetricsDashboard() {
   const handleRunEvaluation = async () => {
     setIsTriggering(true);
     try {
-      const response = await fetch('http://localhost:8000/api/evaluate', {
+      const response = await fetch(`${API_BASE_URL}/api/evaluate`, {
         method: 'POST'
       });
       if (response.ok) {
